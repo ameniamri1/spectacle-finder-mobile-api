@@ -1,5 +1,5 @@
 
-const { pool } = require('../config/db.config');
+import { pool } from '../config/db.config.js';
 
 // Billet Model
 const Billet = {
@@ -104,4 +104,4 @@ const Billet = {
   }
 };
 
-module.exports = Billet;
+export default Billet;
