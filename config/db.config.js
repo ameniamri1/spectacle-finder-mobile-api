@@ -1,6 +1,6 @@
 
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -18,6 +18,4 @@ const pool = mysql.createPool({
 // Get a Promise wrapped instance of the pool
 const promisePool = pool.promise();
 
-module.exports = {
-  pool: promisePool
-};
+export { promisePool as pool };

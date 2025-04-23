@@ -1,5 +1,5 @@
 
-const { pool } = require('../config/db.config');
+import { pool } from '../config/db.config.js';
 
 const Artiste = {
   // Get all artistes
@@ -141,4 +141,4 @@ const Artiste = {
   }
 };
 
-module.exports = Artiste;
+export default Artiste;

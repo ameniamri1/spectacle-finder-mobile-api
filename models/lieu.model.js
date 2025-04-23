@@ -1,5 +1,5 @@
 
-const { pool } = require('../config/db.config');
+import { pool } from '../config/db.config.js';
 
 // Lieu Model
 const Lieu = {
@@ -102,4 +102,4 @@ const Lieu = {
   }
 };
 
-module.exports = Lieu;
+export default Lieu;
