@@ -1,7 +1,8 @@
 
-const express = require('express');
+import express from 'express';
+import Representation from '../models/representation.model.js';
+
 const router = express.Router();
-const Representation = require('../models/representation.model');
 
 // Get all representations
 router.get('/', async (req, res) => {
@@ -137,4 +138,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

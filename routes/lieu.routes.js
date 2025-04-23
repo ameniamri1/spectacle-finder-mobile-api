@@ -1,7 +1,8 @@
 
-const express = require('express');
+import express from 'express';
+import Lieu from '../models/lieu.model.js';
+
 const router = express.Router();
-const Lieu = require('../models/lieu.model');
 
 // Get all lieux
 router.get('/', async (req, res) => {
@@ -98,4 +99,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

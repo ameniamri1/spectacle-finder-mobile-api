@@ -1,7 +1,8 @@
 
-const express = require('express');
+import express from 'express';
+import Artiste from '../models/artiste.model.js';
+
 const router = express.Router();
-const Artiste = require('../models/artiste.model');
 
 // Get all artistes
 router.get('/', async (req, res) => {
@@ -110,4 +111,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

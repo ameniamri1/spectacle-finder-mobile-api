@@ -1,7 +1,8 @@
 
-const express = require('express');
+import express from 'express';
+import Spectacle from '../models/spectacle.model.js';
+
 const router = express.Router();
-const Spectacle = require('../models/spectacle.model');
 
 // Get all spectacles
 router.get('/', async (req, res) => {
@@ -104,4 +105,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
