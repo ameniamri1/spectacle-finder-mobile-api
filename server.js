@@ -22,7 +22,6 @@ const billetRoutes = require('./routes/billet.routes');
 const lieuRoutes = require('./routes/lieu.routes');
 const artisteRoutes = require('./routes/artiste.routes');
 const representationRoutes = require('./routes/representation.routes');
-const authRoutes = require('./routes/auth.routes');
 
 // Use routes
 app.use('/api/spectacles', spectacleRoutes);
@@ -30,7 +29,6 @@ app.use('/api/billets', billetRoutes);
 app.use('/api/lieux', lieuRoutes);
 app.use('/api/artistes', artisteRoutes);
 app.use('/api/representations', representationRoutes);
-app.use('/api/auth', authRoutes);
 
 // Test route
 app.get('/', (req, res) => {
