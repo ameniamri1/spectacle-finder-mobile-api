@@ -22,6 +22,7 @@ import billetRoutes from './routes/billet.routes.js';
 import lieuRoutes from './routes/lieu.routes.js';
 import artisteRoutes from './routes/artiste.routes.js';
 import representationRoutes from './routes/representation.routes.js';
+import placeRoutes from './routes/place.routes.js';
 
 // Use routes
 app.use('/api/spectacles', spectacleRoutes);
@@ -29,6 +30,7 @@ app.use('/api/billets', billetRoutes);
 app.use('/api/lieux', lieuRoutes);
 app.use('/api/artistes', artisteRoutes);
 app.use('/api/representations', representationRoutes);
+app.use('/api/places', placeRoutes);
 
 // Test route
 app.get('/', (req, res) => {

@@ -1,4 +1,3 @@
-
 import express from 'express';
 import Representation from '../models/representation.model.js';
 
@@ -29,7 +28,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Get representation with details (including available billets)
+// Get representation details (including available billets)
 router.get('/:id/details', async (req, res) => {
   try {
     const representation = await Representation.findWithDetails(req.params.id);
@@ -76,17 +75,12 @@ router.get('/date/:date', async (req, res) => {
   }
 });
 
-// Search representations
+// Search representations with criteria
 router.get('/search/criteria', async (req, res) => {
   try {
-    const criteria = {
-      titre: req.query.titre,
-      dateS: req.query.date,
-      h_debut: req.query.heure,
-      nomlieu: req.query.lieu,
-      ville: req.query.ville
-    };
-    
+    const { titre, dateS, h_debut, nomlieu, ville } = req.query;
+    const criteria = { titre, dateS, h_debut, nomlieu, ville };
+
     const representations = await Representation.search(criteria);
     res.json(representations);
   } catch (err) {
@@ -113,7 +107,7 @@ router.put('/:id', async (req, res) => {
     if (!representation) {
       return res.status(404).json({ message: 'Representation not found' });
     }
-    
+
     const updatedRepresentation = await Representation.update(req.params.id, req.body);
     res.json(updatedRepresentation);
   } catch (err) {
@@ -129,7 +123,7 @@ router.delete('/:id', async (req, res) => {
     if (!representation) {
       return res.status(404).json({ message: 'Representation not found' });
     }
-    
+
     await Representation.delete(req.params.id);
     res.json({ message: 'Representation deleted successfully' });
   } catch (err) {

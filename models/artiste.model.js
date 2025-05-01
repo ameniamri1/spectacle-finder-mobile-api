@@ -1,4 +1,3 @@
-
 import { pool } from '../config/db.config.js';
 
 const Artiste = {
@@ -58,7 +57,7 @@ const Artiste = {
         FROM representation r
         INNER JOIN rubrique rb ON r.idRep = rb.idRep
         WHERE rb.idArt = ? 
-        AND r.dateS = ?
+        AND r.dateS = ? 
         AND (
           (r.h_debut <= ? AND ADDTIME(r.h_debut, r.duree) > ?) 
           OR (r.h_debut < ADDTIME(?, ?) AND ADDTIME(r.h_debut, r.duree) >= ADDTIME(?, ?))

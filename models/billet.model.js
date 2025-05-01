@@ -1,9 +1,7 @@
-
 import { pool } from '../config/db.config.js';
 
-// Billet Model
 const Billet = {
-  // Get all billets
+  // Obtenir tous les billets
   findAll: async () => {
     try {
       const [rows] = await pool.query('SELECT * FROM billet');
@@ -13,7 +11,7 @@ const Billet = {
     }
   },
 
-  // Get a billet by ID
+  // Obtenir un billet par ID
   findById: async (id) => {
     try {
       const [rows] = await pool.query('SELECT * FROM billet WHERE idBillet = ?', [id]);
@@ -23,7 +21,7 @@ const Billet = {
     }
   },
 
-  // Get billets by representation ID
+  // Obtenir les billets par ID de représentation
   findByRepresentation: async (idRep) => {
     try {
       const [rows] = await pool.query('SELECT * FROM billet WHERE idRep = ?', [idRep]);
@@ -33,17 +31,20 @@ const Billet = {
     }
   },
 
-  // Get available billets for a representation
+  // Obtenir les billets disponibles pour une représentation
   findAvailableByRepresentation: async (idRep) => {
     try {
-      const [rows] = await pool.query('SELECT * FROM billet WHERE idRep = ? AND (vendu IS NULL OR vendu = "non")', [idRep]);
+      const [rows] = await pool.query(
+        'SELECT * FROM billet WHERE idRep = ? AND (vendu IS NULL OR vendu = "non")',
+        [idRep]
+      );
       return rows;
     } catch (error) {
       throw error;
     }
   },
 
-  // Count available billets for a representation
+  // Compter les billets disponibles pour une représentation
   countAvailableByRepresentation: async (idRep) => {
     try {
       const [rows] = await pool.query(
@@ -56,7 +57,7 @@ const Billet = {
     }
   },
 
-  // Create a new billet
+  // Créer un nouveau billet
   create: async (billetData) => {
     try {
       const [result] = await pool.query(
@@ -69,7 +70,7 @@ const Billet = {
     }
   },
 
-  // Update a billet
+  // Mettre à jour un billet
   update: async (id, billetData) => {
     try {
       await pool.query(
@@ -82,18 +83,18 @@ const Billet = {
     }
   },
 
-  // Mark a billet as sold
+  // Marquer un billet comme vendu
   markAsSold: async (id, clientInfo) => {
     try {
       await pool.query('UPDATE billet SET vendu = "oui" WHERE idBillet = ?', [id]);
-      // In a real app, you would also store the client info in a clients table
-      return { id, status: 'sold', clientInfo };
+      // Dans une application réelle, vous devriez également enregistrer les informations du client dans une table dédiée
+      return { id, status: 'vendu', clientInfo };
     } catch (error) {
       throw error;
     }
   },
 
-  // Delete a billet
+  // Supprimer un billet
   delete: async (id) => {
     try {
       await pool.query('DELETE FROM billet WHERE idBillet = ?', [id]);

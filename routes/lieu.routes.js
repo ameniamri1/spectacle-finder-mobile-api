@@ -1,4 +1,3 @@
-
 import express from 'express';
 import Lieu from '../models/lieu.model.js';
 
@@ -32,11 +31,9 @@ router.get('/:id', async (req, res) => {
 // Search lieux by name or city
 router.get('/search/criteria', async (req, res) => {
   try {
-    const criteria = {
-      nomLieu: req.query.nom,
-      ville: req.query.ville
-    };
-    
+    const { nom, ville } = req.query;
+    const criteria = { nomLieu: nom, ville };
+
     const lieux = await Lieu.search(criteria);
     res.json(lieux);
   } catch (err) {
@@ -56,6 +53,26 @@ router.get('/:id/spectacles', async (req, res) => {
   }
 });
 
+// Route pour obtenir un lieu par spectacleId
+// Route pour obtenir un lieu par spectacleId
+router.get('/spectacle/:id', async (req, res) => {
+  const spectacleId = req.params.id;
+
+  try {
+    const lieux = await Lieu.getLieuBySpectacleId(spectacleId);
+    
+    if (!lieux || lieux.length === 0) {
+      return res.status(404).json({ message: "Aucun lieu trouvé pour ce spectacle." });
+    }
+    
+    res.json(lieux);
+  } catch (error) {
+    console.error("Erreur dans la récupération des lieux:", error.message);
+    res.status(500).json({ error: "Erreur interne du serveur." });
+  }
+});
+
+
 // Create a new lieu
 router.post('/', async (req, res) => {
   try {
@@ -74,7 +91,7 @@ router.put('/:id', async (req, res) => {
     if (!lieu) {
       return res.status(404).json({ message: 'Lieu not found' });
     }
-    
+
     const updatedLieu = await Lieu.update(req.params.id, req.body);
     res.json(updatedLieu);
   } catch (err) {
@@ -90,12 +107,29 @@ router.delete('/:id', async (req, res) => {
     if (!lieu) {
       return res.status(404).json({ message: 'Lieu not found' });
     }
-    
+
     await Lieu.delete(req.params.id);
     res.json({ message: 'Lieu deleted successfully' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server Error', error: err.message });
+  }
+});
+// Route pour obtenir un lieu par spectacleId
+router.get('/spectacle/:id', async (req, res) => {
+  const spectacleId = req.params.id;
+
+  try {
+    const lieux = await Lieu.getLieuBySpectacleId(spectacleId);
+    
+    if (!lieux || lieux.length === 0) {
+      return res.status(404).json({ message: "Aucun lieu trouvé pour ce spectacle." });
+    }
+    
+    res.json(lieux);
+  } catch (error) {
+    console.error("Erreur dans la récupération des lieux:", error.message);
+    res.status(500).json({ error: "Erreur interne du serveur." });
   }
 });
 

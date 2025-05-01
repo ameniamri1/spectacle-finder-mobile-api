@@ -1,6 +1,5 @@
-
 import express from 'express';
-import Artiste from '../models/artiste.model.js';
+import Artiste from '../models/artiste.model.js';  // Utilisation de la syntaxe import
 
 const router = express.Router();
 
@@ -29,14 +28,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Search artistes
+// Search artistes by criteria
 router.get('/search/criteria', async (req, res) => {
   try {
-    const criteria = {
-      nom: req.query.nom,
-      prenom: req.query.prenom,
-      specialite: req.query.specialite
-    };
+    const { nom, prenom, specialite } = req.query;
+    const criteria = { nom, prenom, specialite };
     
     const artistes = await Artiste.search(criteria);
     res.json(artistes);
@@ -86,7 +82,7 @@ router.put('/:id', async (req, res) => {
     if (!artiste) {
       return res.status(404).json({ message: 'Artiste not found' });
     }
-    
+
     const updatedArtiste = await Artiste.update(req.params.id, req.body);
     res.json(updatedArtiste);
   } catch (err) {
@@ -102,7 +98,7 @@ router.delete('/:id', async (req, res) => {
     if (!artiste) {
       return res.status(404).json({ message: 'Artiste not found' });
     }
-    
+
     await Artiste.delete(req.params.id);
     res.json({ message: 'Artiste deleted successfully' });
   } catch (err) {

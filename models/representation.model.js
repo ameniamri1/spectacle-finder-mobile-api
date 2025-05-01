@@ -1,5 +1,4 @@
-
-const { pool } = require('../config/db.config');
+import { pool } from '../config/db.config.js';
 
 // Representation Model
 const Representation = {
@@ -14,7 +13,8 @@ const Representation = {
       `);
       return rows;
     } catch (error) {
-      throw error;
+      console.error("Error fetching all representations: ", error.message);
+      throw new Error("Unable to fetch representations.");
     }
   },
 
@@ -28,9 +28,13 @@ const Representation = {
         LEFT JOIN lieu l ON r.idLieu = l.idLieu 
         WHERE r.idRep = ?
       `, [id]);
+      if (rows.length === 0) {
+        throw new Error("Representation not found");
+      }
       return rows[0];
     } catch (error) {
-      throw error;
+      console.error("Error fetching representation by ID: ", error.message);
+      throw new Error("Unable to fetch representation by ID.");
     }
   },
 
@@ -45,7 +49,8 @@ const Representation = {
       `, [spectacleId]);
       return rows;
     } catch (error) {
-      throw error;
+      console.error("Error fetching representations by spectacle ID: ", error.message);
+      throw new Error("Unable to fetch representations by spectacle ID.");
     }
   },
 
@@ -60,7 +65,8 @@ const Representation = {
       `, [lieuId]);
       return rows;
     } catch (error) {
-      throw error;
+      console.error("Error fetching representations by lieu ID: ", error.message);
+      throw new Error("Unable to fetch representations by lieu ID.");
     }
   },
 
@@ -76,56 +82,55 @@ const Representation = {
       `, [date]);
       return rows;
     } catch (error) {
-      throw error;
+      console.error("Error fetching representations by date: ", error.message);
+      throw new Error("Unable to fetch representations by date.");
     }
   },
 
   // Create a new representation
   create: async (representationData) => {
     try {
+      const { idSpec, dateS, h_debut, duree, idLieu } = representationData;
       const [result] = await pool.query(
         'INSERT INTO representation (idSpec, dateS, h_debut, duree, idLieu) VALUES (?, ?, ?, ?, ?)',
-        [
-          representationData.idSpec, 
-          representationData.dateS, 
-          representationData.h_debut, 
-          representationData.duree, 
-          representationData.idLieu
-        ]
+        [idSpec, dateS, h_debut, duree, idLieu]
       );
       return { id: result.insertId, ...representationData };
     } catch (error) {
-      throw error;
+      console.error("Error creating representation: ", error.message);
+      throw new Error("Unable to create representation.");
     }
   },
 
   // Update a representation
   update: async (id, representationData) => {
     try {
-      await pool.query(
+      const { idSpec, dateS, h_debut, duree, idLieu } = representationData;
+      const [result] = await pool.query(
         'UPDATE representation SET idSpec = ?, dateS = ?, h_debut = ?, duree = ?, idLieu = ? WHERE idRep = ?',
-        [
-          representationData.idSpec, 
-          representationData.dateS, 
-          representationData.h_debut, 
-          representationData.duree, 
-          representationData.idLieu, 
-          id
-        ]
+        [idSpec, dateS, h_debut, duree, idLieu, id]
       );
+      if (result.affectedRows === 0) {
+        throw new Error("Representation not found or not updated.");
+      }
       return { id, ...representationData };
     } catch (error) {
-      throw error;
+      console.error("Error updating representation: ", error.message);
+      throw new Error("Unable to update representation.");
     }
   },
 
   // Delete a representation
   delete: async (id) => {
     try {
-      await pool.query('DELETE FROM representation WHERE idRep = ?', [id]);
+      const [result] = await pool.query('DELETE FROM representation WHERE idRep = ?', [id]);
+      if (result.affectedRows === 0) {
+        throw new Error("Representation not found or not deleted.");
+      }
       return { id };
     } catch (error) {
-      throw error;
+      console.error("Error deleting representation: ", error.message);
+      throw new Error("Unable to delete representation.");
     }
   },
 
@@ -142,7 +147,7 @@ const Representation = {
       `, [id]);
       
       if (representation.length === 0) return null;
-      
+
       // Get available billets count
       const [billets] = await pool.query(`
         SELECT COUNT(*) as total_billets,
@@ -170,7 +175,8 @@ const Representation = {
         artistes
       };
     } catch (error) {
-      throw error;
+      console.error("Error fetching representation details: ", error.message);
+      throw new Error("Unable to fetch representation details.");
     }
   },
 
@@ -215,9 +221,10 @@ const Representation = {
       const [rows] = await pool.query(query, params);
       return rows;
     } catch (error) {
-      throw error;
+      console.error("Error searching representations: ", error.message);
+      throw new Error("Unable to search representations.");
     }
   }
 };
 
-module.exports = Representation;
+export default Representation;

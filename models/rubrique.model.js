@@ -1,5 +1,4 @@
-
-const { pool } = require('../config/db.config');
+import { pool } from '../config/db.config.js';
 
 // Rubrique Model
 const Rubrique = {
@@ -9,7 +8,7 @@ const Rubrique = {
       const [rows] = await pool.query(`
         SELECT rb.*, a.NomArt, a.PrenomArt, a.specialite, r.dateS 
         FROM rubrique rb 
-        LEFT JOIN artiste a ON rb.idArt = a.idArt OR rb.id_art = a.idArt
+        LEFT JOIN artiste a ON rb.idArt = a.idArt
         LEFT JOIN representation r ON rb.idRep = r.idRep
       `);
       return rows;
@@ -24,7 +23,7 @@ const Rubrique = {
       const [rows] = await pool.query(`
         SELECT rb.*, a.NomArt, a.PrenomArt, a.specialite, r.dateS 
         FROM rubrique rb 
-        LEFT JOIN artiste a ON rb.idArt = a.idArt OR rb.id_art = a.idArt
+        LEFT JOIN artiste a ON rb.idArt = a.idArt
         LEFT JOIN representation r ON rb.idRep = r.idRep
         WHERE rb.idRub = ?
       `, [id]);
@@ -40,7 +39,7 @@ const Rubrique = {
       const [rows] = await pool.query(`
         SELECT rb.*, a.NomArt, a.PrenomArt, a.specialite 
         FROM rubrique rb 
-        LEFT JOIN artiste a ON rb.idArt = a.idArt OR rb.id_art = a.idArt
+        LEFT JOIN artiste a ON rb.idArt = a.idArt
         WHERE rb.idRep = ?
       `, [repId]);
       return rows;
@@ -57,8 +56,8 @@ const Rubrique = {
         FROM rubrique rb 
         LEFT JOIN representation r ON rb.idRep = r.idRep
         LEFT JOIN spectacle s ON r.idSpec = s.idSpec
-        WHERE rb.idArt = ? OR rb.id_art = ?
-      `, [artisteId, artisteId]);
+        WHERE rb.idArt = ?
+      `, [artisteId]);
       return rows;
     } catch (error) {
       throw error;
@@ -69,7 +68,8 @@ const Rubrique = {
   create: async (rubriqueData) => {
     try {
       const [result] = await pool.query(
-        'INSERT INTO rubrique (idRep, idArt, h_debutr, dureeRub, type, duree_rub, id_art, id_spec) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        `INSERT INTO rubrique (idRep, idArt, h_debutr, dureeRub, type, duree_rub, id_spec)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [
           rubriqueData.idRep,
           rubriqueData.idArt,
@@ -77,7 +77,6 @@ const Rubrique = {
           rubriqueData.dureeRub,
           rubriqueData.type,
           rubriqueData.duree_rub,
-          rubriqueData.id_art || rubriqueData.idArt,
           rubriqueData.id_spec
         ]
       );
@@ -91,7 +90,8 @@ const Rubrique = {
   update: async (id, rubriqueData) => {
     try {
       await pool.query(
-        'UPDATE rubrique SET idRep = ?, idArt = ?, h_debutr = ?, dureeRub = ?, type = ?, duree_rub = ?, id_art = ?, id_spec = ? WHERE idRub = ?',
+        `UPDATE rubrique SET idRep = ?, idArt = ?, h_debutr = ?, dureeRub = ?, type = ?, duree_rub = ?, id_spec = ? 
+         WHERE idRub = ?`,
         [
           rubriqueData.idRep,
           rubriqueData.idArt,
@@ -99,7 +99,6 @@ const Rubrique = {
           rubriqueData.dureeRub,
           rubriqueData.type,
           rubriqueData.duree_rub,
-          rubriqueData.id_art || rubriqueData.idArt,
           rubriqueData.id_spec,
           id
         ]
@@ -121,4 +120,4 @@ const Rubrique = {
   }
 };
 
-module.exports = Rubrique;
+export default Rubrique;
